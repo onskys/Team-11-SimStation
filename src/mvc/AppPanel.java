@@ -13,16 +13,18 @@ import java.io.ObjectOutputStream;
 /* Class "AppPanel" Datalog
 4/4/2023 - Owen Semersky: Created File
                           Imported Owen's version of AppPanel
+4/6/2023 - Owen Semersky: Added professor's version of AppPanel
+
 
  */
 
-public class AppPanel extends JPanel implements PropertyChangeListener, ActionListener {
+public class AppPanel extends JPanel implements PropertyChangeListener, ActionListener  {
 
     protected Model model;
     protected AppFactory factory;
-    protected View views;
-    protected ControlPanel controls;
-    private SafeFrame frame;
+    protected View view;
+    protected JPanel controlPanel;
+    private JFrame frame;
     public static int FRAME_WIDTH = 500;
     public static int FRAME_HEIGHT = 300;
 
@@ -30,51 +32,35 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
         super();
         this.factory = factory;
         model = factory.makeModel();
-        views = factory.makeView(model);
-        if (model != null) model.addPropertyChangeListener(this);
-        views.setBackground(Color.LIGHT_GRAY);
+        view = factory.makeView(model);
+        view.setBackground((Color.GRAY));
 
-        controls = new ControlPanel();
-        this.setLayout((new GridLayout(1, 2)));
-        this.add(controls);
-        this.add(views);
+        controlPanel = new JPanel();
+        controlPanel.setBackground((Color.PINK));
+        setLayout(new GridLayout(1, 2));
+        add(controlPanel);
+        add(view);
+
+        if (model != null) {
+            model.addPropertyChangeListener(this);
+            model.addPropertyChangeListener(view);
+        }
 
         frame = new SafeFrame();
         Container cp = frame.getContentPane();
+        cp.add(this);
         frame.setJMenuBar(createMenuBar());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle(factory.getTitle());
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        cp.add(this);
     }
 
-    public void addControl(JComponent c){
-        controls.add(c);
-    }
-/*
-    public void addView(View view) {
-        views.add(view);
-    }
-    @Override
-    public Component add(Component c) {
-        if (c instanceof View) addView((View) c);
-        return super.add(c);
-    }
- */
+    public void display() { frame.setVisible(true); }
 
-    public void display() {
-        frame.setVisible(true);
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        repaint();
+        /* override in extensions if needed */
     }
 
-    public Model getModel() {
-        return model;
-    }
-
+    public Model getModel() { return model; }
 
     // called by file/open and file/new
     public void setModel(Model newModel) {
@@ -82,16 +68,16 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
         this.model = newModel;
         this.model.initSupport();
         this.model.addPropertyChangeListener(this);
-        //for(View view: views) view.setModel(this.model);
+        view.setModel(this.model);
+        model.changed();
         //alternatively: this.model.copy(model);
     }
-
 
     protected JMenuBar createMenuBar() {
         JMenuBar result = new JMenuBar();
         // add file, edit, and help menus
         JMenu fileMenu =
-                Utilities.makeMenu("File", new String[]{"New", "Save", "Save As", "Open", "Quit"}, this);
+                Utilities.makeMenu("File", new String[] {"New",  "Save", "SaveAs", "Open", "Quit"}, this);
         result.add(fileMenu);
 
         JMenu editMenu =
@@ -99,93 +85,45 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
         result.add(editMenu);
 
         JMenu helpMenu =
-                Utilities.makeMenu("Help", new String[]{"About", "Help"}, this);
+                Utilities.makeMenu("Help", new String[] {"About", "Help"}, this);
         result.add(helpMenu);
 
         return result;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String cmmd = e.getActionCommand();
-        Command cmmdObject = factory.makeEditCommand(model, cmmd, null);
+    public void actionPerformed(ActionEvent ae) {
         try {
-            switch (cmmd) {
+            String cmmd = ae.getActionCommand();
 
-                case "Save": {
-                    String fName = Utilities.getFileName((String) null, true);
-                    ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
-                    os.writeObject(this.model);
-                    os.close();
-                    break;
-                }
-
-                case "Save As": {
-                    String fName = Utilities.getFileName((String) null, false);
-                    ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
-                    os.writeObject(this.model);
-                    os.close();
-                    break;
-                }
-
-                case "Open": {
-
-                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
-                        String fName = Utilities.getFileName((String) null, true);
-                        ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
-                        model = (Model) is.readObject();
-                        //view.setModel(model);
-                        is.close();
-                    }
-                    break;
-                }
-
-                case "New": {
-                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
-                        model = new Model();
-                        views.setModel(model);
-                    }
-                    break;
-                }
-
-                case "Quit": {
-                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!"))
-                        System.exit(0);
-                    break;
-                }
-
-                case "About": {
-                    Utilities.inform(factory.about());
-                    break;
-                }
-
-                case "Help": {
-                    String[] cmmds = factory.getHelp();
-                    Utilities.inform(cmmds);
-                    break;
-                }
-
-                default: {
-                    factory.makeEditCommand(model, cmmd, this).execute();
-                }
+            if (cmmd == "Save") {
+                Utilities.save(model, false);
+            } else if (cmmd == "SaveAs") {
+                Utilities.save(model, true);
+            } else if (cmmd == "Open") {
+                Model newModel = Utilities.open(model);
+                if (newModel != null) setModel(newModel);
+            } else if (cmmd == "New") {
+                Utilities.saveChanges(model);
+                setModel(factory.makeModel());
+                // needed cuz setModel sets to true:
+                model.setUnsavedChanges(false);
+            } else if (cmmd == "Quit") {
+                Utilities.saveChanges(model);
+                System.exit(1);
+            } else if (cmmd == "About") {
+                Utilities.inform(factory.about());
+            } else if (cmmd == "Help") {
+                Utilities.inform(factory.getHelp());
+            } else { // must be from Edit menu
+                Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
+                command.execute();
             }
-        } catch (Exception ex) {
-            Utilities.error(ex); // all error handling done here!
+        } catch (Exception e) {
+            handleException(e);
         }
-
-//        try{
-//            cmmdObject.execute();
-//        } catch (Exception ex){
-//            Utilities.error(ex);
-//        }
     }
 
-    class ControlPanel extends JPanel {
-        public ControlPanel() {
-            setBackground(Color.LIGHT_GRAY);
-            setLayout(new GridLayout(4, 2));
-            JPanel p = new JPanel();
-            Dimension buttonSize = new Dimension(50, 25);
-
-        }
+    protected void handleException(Exception e) {
+        Utilities.error(e);
     }
 }
