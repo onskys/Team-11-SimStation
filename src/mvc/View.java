@@ -2,7 +2,7 @@ package mvc;
 
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -10,32 +10,31 @@ import java.beans.PropertyChangeListener;
 /* Class "View" Datalog
 4/4/2023 - Owen Semersky: Created File
                           Imported Owen's version of View
+4/6/2023 - Owen Semersky: Added professor's version of View
 
  */
 public class View extends JPanel implements PropertyChangeListener {
-    public Model model;
 
-    public View(Model model){
+    protected Model model;
+
+    public View(Model model) {
+        super();
         this.model = model;
-        setSize(500, 300);
-        Border blackline = BorderFactory.createLineBorder(Color.black);
-        setBorder(blackline);
-        setBackground(Color.WHITE);
+        //model.addPropertyChangeListener(this);
+        // optional border around the view component
+        setBorder(LineBorder.createGrayLineBorder());//.createBlackLineBorder());
     }
 
-    public void setModel(Model model){
-        this.model = model;
-    }
+    public Model getModel() {return model; }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt){
-
-        String event = evt.getPropertyName();
-
-        if("New".equals(event) || "Open".equals(event)){
-            this.model = (Model)evt.getNewValue();
-            model.initSupport();
-            repaint();
+    // called by File/Open and File/New
+    public void setModel(Model newModel) {
+        this.model = newModel;
+        if (newModel != null) {
+            this.model.addPropertyChangeListener(this);
         }
     }
+    @Override
+    public void propertyChange(PropertyChangeEvent arg0) { this.repaint(); }
+
 }
