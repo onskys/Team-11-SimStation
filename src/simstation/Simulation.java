@@ -8,7 +8,7 @@ import java.util.*;
                           Added mvc import and Model extension, added given code
                           Added outline (variables and methods)
 4/7/2023 - Owen Semersky: Made edits to some methods.
-
+                          Added method headers
 
  */
 
@@ -35,16 +35,24 @@ public class Simulation extends Model {
     }
 
     // Starts the simulation.
-    // start()
+    public void start() {
+        // Call agent start methods
+    }
 
     // Pauses the simulation.
-    // suspend()
+    public void suspend() {
+        // Call agent suspend methods
+    }
 
     // Resumes the simulation.
-    // resume()
+    public void resume() {
+        // Call agent resume methods
+    }
 
     // Stops the simulation entirely.
-    // stop()
+    public void stop() {
+        // Call agent stop methods
+    }
 
     // Gets a nearby neighboring agent in the simulation.
     public Agent getNeighbor(Agent a, Double radius) {
@@ -56,7 +64,4 @@ public class Simulation extends Model {
     public void populate() {
 
     }
-
-    // Adds an agent to this simulation.
-    // addAgent() ???
 }
