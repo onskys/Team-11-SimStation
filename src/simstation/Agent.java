@@ -6,8 +6,8 @@ import java.io.Serializable;
 4/4/2023 - Owen Semersky: Created File
                           Implemented Serializable and Runnable
                           Added outline (variables and methods)
-4/7/2023 - Owen Semersky: Added instance variables and implemented some methods.
-
+4/7/2023 - Owen Semersky: Added instance variables and headers
+                          Added implementation for move method
  */
 
 public class Agent implements Serializable, Runnable {
@@ -29,23 +29,36 @@ public class Agent implements Serializable, Runnable {
 
     // Run method, active agent movement or change.
     public void run() {
+
+    }
+
+    // Start method, starts running of the agent.
+    public void start() {
         
     }
-    
-    // Start method, starts running of the agent.
-    // start()
-    
+
     // Suspend method, pauses running of the agent.
-    // suspend()
-    
+    public void suspend() {
+        suspended = true;
+        // Continued
+    }
+
     // Resume method, resumes running of the agent.
-    // resume()
-    
+    public void resume() {
+        suspended = false;
+        // Continued
+    }
+
     // Stop method, stops all activity of the agent.
-    // stop()
-    
+    public void stop() {
+        stopped = true;
+        // Continued
+    }
+
     // Update method, updates current qualities of agent, such as position.
-    // update()
+    public void update() {
+        
+    }
 
     // Moves the Agent in a direction depending on their heading. 8 cases.
     public void move(int steps) {
