@@ -2,7 +2,7 @@ package simstation;
 
 import mvc.*;
 
-/* Class "SimulationPanel" Datalog
+/* Class "SimulationView" Datalog
 4/4/2023 - Owen Semersky: Created file
 
  */
