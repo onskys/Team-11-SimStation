@@ -44,7 +44,7 @@ public class SimStationFactory implements AppFactory {
     }
 
     public String about() {
-        return "Owen Semersky, Sanjana Jagarlapudi" + "\n2023. All rights reserved."
+        return "Owen Semersky, Sanjana Jagarlapudi" + "\n2023. All rights reserved.";
     }
 
 }
