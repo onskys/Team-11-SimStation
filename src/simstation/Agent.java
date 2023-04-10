@@ -8,57 +8,51 @@ import java.io.Serializable;
                           Added outline (variables and methods)
 4/7/2023 - Owen Semersky: Added instance variables and headers
                           Added implementation for move method
+4/9/2023 - Owen Semersky: Made edits to methods
+                          Changed class and update method to be abstract
  */
 
-public class Agent implements Serializable, Runnable {
+public abstract class Agent implements Serializable, Runnable {
 
-    // name: String
     private String name;
-    // heading: Heading
-    private Heading heading;
-    // xc: int
+    protected Heading heading;
     private int xc;
-    // yc: int
     private int yc;
-    // suspended: boolean = false
     private boolean suspended = false;
-    // stopped: boolean = false
     private boolean stopped = false;
-    // myThread: Thread
     private Thread myThread;
 
     // Run method, active agent movement or change.
     public void run() {
-
+        while (suspended == false && stopped == false) {
+            update();
+        }
     }
 
     // Start method, starts running of the agent.
     public void start() {
-        
+        suspended = false;
+        run();
     }
 
     // Suspend method, pauses running of the agent.
     public void suspend() {
         suspended = true;
-        // Continued
     }
 
     // Resume method, resumes running of the agent.
     public void resume() {
         suspended = false;
-        // Continued
+        run();
     }
 
     // Stop method, stops all activity of the agent.
     public void stop() {
         stopped = true;
-        // Continued
     }
 
     // Update method, updates current qualities of agent, such as position.
-    public void update() {
-        
-    }
+    public abstract void update();
 
     // Moves the Agent in a direction depending on their heading. 8 cases.
     public void move(int steps) {
