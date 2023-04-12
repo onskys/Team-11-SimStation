@@ -15,14 +15,14 @@ import java.io.Serializable;
 
 public abstract class Agent implements Serializable, Runnable {
 
-    private String name;
+    protected String name;
     protected Heading heading;
     private int xc;
     private int yc;
     private boolean suspended;
     private boolean stopped;
-    private Thread myThread;
-    private Simulation world;
+    protected Thread myThread;
+    protected Simulation world;
 
     // Constructor
     public Agent (String name) {
@@ -36,6 +36,7 @@ public abstract class Agent implements Serializable, Runnable {
     public void run() {
         myThread = new Thread(this);
         myThread.start();
+        onStart();
         while (!isStopped()) {
             try {
                 // System.out.println("We have a problem");
@@ -47,6 +48,7 @@ public abstract class Agent implements Serializable, Runnable {
                 System.out.println(e.getMessage());
             }
         }
+        onExit();
     }
 
     private synchronized void checkSuspended() {
@@ -61,14 +63,14 @@ public abstract class Agent implements Serializable, Runnable {
     }
 
     // Start method, starts running of the agent.
-    public void start() {
+    public synchronized void start() {
         System.out.println("Starting");
         suspended = false;
         run();
     }
 
     // Suspend method, pauses running of the agent.
-    public void suspend() {
+    public synchronized void suspend() {
         suspended = true;
     }
 
@@ -79,7 +81,7 @@ public abstract class Agent implements Serializable, Runnable {
     }
 
     // Stop method, stops all activity of the agent.
-    public void stop() {
+    public synchronized void stop() {
         stopped = true;
     }
 
@@ -144,4 +146,18 @@ public abstract class Agent implements Serializable, Runnable {
     public void setWorld(Simulation s) {
         this.world = s;
     }
+
+    public int getX() {
+        return xc;
+    }
+
+    public int getY() {
+        return yc;
+    }
+
+    public void onStart() {}
+
+    public void onExit() {}
+
+    public void onInterrupted() {}
 }
