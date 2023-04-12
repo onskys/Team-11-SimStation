@@ -1,6 +1,7 @@
 package simstation;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /* Class "Agent" Datalog
 4/4/2023 - Owen Semersky: Created File
@@ -11,6 +12,7 @@ import java.io.Serializable;
 4/9/2023 - Owen Semersky: Made edits to methods
                           Changed class and update method to be abstract
 4/11/2023 - Owen Semersky: Implemented some methods, added some methods
+4/12/2023 - Owen Semersky: Made edits to methods, added synchronization
  */
 
 public abstract class Agent implements Serializable, Runnable {
@@ -30,18 +32,22 @@ public abstract class Agent implements Serializable, Runnable {
         suspended = false;
         stopped = false;
         myThread = null;
+
+        // Hard coded for now, should change to a random spot in the view.
+        xc = 100;
+        yc = 100;
     }
 
     // Run method, active agent movement or change.
     public void run() {
-        myThread = new Thread(this);
-        myThread.start();
+        myThread = Thread.currentThread();
+        // myThread.start();
         onStart();
         while (!isStopped()) {
             try {
                 // System.out.println("We have a problem");
                 update();
-                Thread.sleep(20);
+                Thread.sleep(100); // Suggested speed is 20, too fast for now.
                 checkSuspended();
             }
             catch (InterruptedException e) {
@@ -97,6 +103,7 @@ public abstract class Agent implements Serializable, Runnable {
     public abstract void update();
 
     // Moves the Agent in a direction depending on their heading. 8 cases.
+    // Still requires wrapping functionality.
     public void move(int steps) {
         System.out.println("We're moving!");
         if (heading == Heading.NORTH) {
