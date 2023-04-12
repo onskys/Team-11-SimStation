@@ -10,6 +10,7 @@ import java.util.*;
 4/7/2023 - Owen Semersky: Made edits to some methods
                           Added method headers
 4/11/2023 - Owen Semersky: Implemented some methods
+4/12/2023 - Owen Semersky: Minor edits
 
  */
 
@@ -44,6 +45,7 @@ public class Simulation extends Model {
     // Starts the simulation.
     public void start() {
         System.out.println("Simulation Starting");
+        startTimer();
         for (Agent a : agents) {
             a.start();
         }
@@ -67,6 +69,7 @@ public class Simulation extends Model {
 
     // Stops the simulation entirely.
     public void stop() {
+        stopTimer();
         System.out.println("Simulation Stopping");
         for (Agent a : agents) {
             a.stop();
