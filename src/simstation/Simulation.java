@@ -47,7 +47,8 @@ public class Simulation extends Model {
         System.out.println("Simulation Starting");
         startTimer();
         for (Agent a : agents) {
-            a.start();
+            Thread thread = new Thread(a);
+            thread.start();
         }
     }
 
