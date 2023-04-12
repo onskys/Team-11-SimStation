@@ -8,6 +8,7 @@ import java.awt.*;
 4/4/2023 - Owen Semersky: Created file
 4/7/2023 - Owen Semersky: Added method headers and some basic code
 4/11/2023 - Owen Semersky: Minor edits
+4/12/2023 - Owen Semersky: Edits to paintComponent, drawing agents
 
  */
 
@@ -19,13 +20,13 @@ public class SimulationView extends View {
         super(s);
         sim = s;
         sim.populate();
-        // Continued
     }
 
     public void paintComponent(Graphics gc) { // Unsure if needed
         super.paintComponent(gc);
+        Graphics2D gc2d = (Graphics2D) gc;
         for (Agent a : sim.getAgents()) {
-            // Draw agent?
+            gc2d.fillRect(a.getX(), a.getY(), 5, 5);
         }
     }
 }
