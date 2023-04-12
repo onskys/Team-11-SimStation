@@ -7,15 +7,22 @@ import java.util.*;
 4/4/2023 - Owen Semersky: Created File
                           Added mvc import and Model extension, added given code
                           Added outline (variables and methods)
-4/7/2023 - Owen Semersky: Made edits to some methods.
+4/7/2023 - Owen Semersky: Made edits to some methods
                           Added method headers
+4/11/2023 - Owen Semersky: Implemented some methods
 
  */
 
 public class Simulation extends Model {
 
     private Timer timer;
-    private int clock = 0; // clock: int = 0
+    private ArrayList<Agent> agents;
+    private int clock; // clock: int = 0
+
+    public Simulation() {
+        agents = new ArrayList<Agent>();
+        clock = 0;
+    }
 
     private void startTimer() {
         timer = new Timer();
@@ -30,28 +37,40 @@ public class Simulation extends Model {
     private class ClockUpdater extends TimerTask {
         public void run() {
             clock++;
-            //changed();
+            changed();
         }
     }
 
     // Starts the simulation.
     public void start() {
-        // Call agent start methods
+        System.out.println("Simulation Starting");
+        for (Agent a : agents) {
+            a.start();
+        }
     }
 
     // Pauses the simulation.
     public void suspend() {
-        // Call agent suspend methods
+        System.out.println("Simulation Suspended");
+        for (Agent a : agents) {
+            a.suspend();
+        }
     }
 
     // Resumes the simulation.
     public void resume() {
-        // Call agent resume methods
+        System.out.println("Simulation Resuming");
+        for (Agent a : agents) {
+            a.resume();
+        }
     }
 
     // Stops the simulation entirely.
     public void stop() {
-        // Call agent stop methods
+        System.out.println("Simulation Stopping");
+        for (Agent a : agents) {
+            a.stop();
+        }
     }
 
     // Gets a nearby neighboring agent in the simulation.
@@ -61,7 +80,18 @@ public class Simulation extends Model {
     }
 
     // Populate is empty, specified in subclasses.
-    public void populate() {
+    public void populate() {}
 
+    // Adds an agent to this simulation.
+    public void addAgent(Agent a) {
+        a.setWorld(this);
+        agents.add(a);
     }
+
+    public ArrayList<Agent> getAgents() {
+        return agents;
+    }
+
+    // Specific stats specified in customizations.
+    public void showStats() {}
 }
