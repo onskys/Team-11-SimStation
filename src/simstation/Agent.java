@@ -10,6 +10,8 @@ import java.io.Serializable;
                           Added implementation for move method
 4/9/2023 - Owen Semersky: Made edits to methods
                           Changed class and update method to be abstract
+4/12/2023 - Sanjana Jagarlapudi: Added getters for xc and yc
+
  */
 
 public abstract class Agent implements Serializable, Runnable {
@@ -21,6 +23,14 @@ public abstract class Agent implements Serializable, Runnable {
     private boolean suspended = false;
     private boolean stopped = false;
     private Thread myThread;
+
+    public int getXc() {
+        return xc;
+    }
+
+    public int getYc() {
+        return yc;
+    }
 
     // Run method, active agent movement or change.
     public void run() {
