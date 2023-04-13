@@ -15,6 +15,7 @@ import java.util.Random;
 4/12/2023 - Owen Semersky: Made edits to methods, added synchronization
                            Changed move method to move in increments
                            Changed move method to allow wrapping
+4/13/2023 - Owen Semersky: Randomized starting location
  */
 
 public abstract class Agent implements Serializable, Runnable {
@@ -35,9 +36,10 @@ public abstract class Agent implements Serializable, Runnable {
         stopped = false;
         myThread = null;
 
-        // Hard coded for now, should change to a random spot in the view.
-        xc = 120;
-        yc = 120;
+        Random random = new Random();
+
+        xc = random.nextInt(241);
+        yc = random.nextInt(241);
     }
 
     // Run method, active agent movement or change.
@@ -49,7 +51,7 @@ public abstract class Agent implements Serializable, Runnable {
             try {
                 // System.out.println("We have a problem");
                 update();
-                Thread.sleep(100); // Suggested speed is 20, too fast for now.
+                Thread.sleep(50); // Suggested speed is 20, too fast for now.
                 checkSuspended();
             }
             catch (InterruptedException e) {
