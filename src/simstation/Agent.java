@@ -25,7 +25,7 @@ public abstract class Agent implements Serializable, Runnable {
     private int yc;
     private boolean suspended;
     private boolean stopped;
-    protected Thread myThread;
+    transient protected Thread myThread;
     protected Simulation world;
 
     // Constructor
