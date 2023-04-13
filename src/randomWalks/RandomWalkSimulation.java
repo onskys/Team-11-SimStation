@@ -14,7 +14,7 @@ import java.util.Iterator;
 class Drunk extends Agent {
 
     public Drunk() {
-        super();
+        super("Drunk");
         heading = Heading.random();
     }
 
@@ -34,6 +34,7 @@ class RandomWalkFactory extends SimStationFactory {
 
 public class RandomWalkSimulation extends Simulation {
 
+    // @Override
     public void populate() {
         for(int i = 0; i < 15; i++)
             addAgent(new Drunk());
@@ -45,3 +46,14 @@ public class RandomWalkSimulation extends Simulation {
     }
 
 }
+
+/*
+class RandomWalkView extends SimulationView {
+    RandomWalkSimulation sim;
+    public RandomWalkView(RandomWalkSimulation s) {
+        super(s);
+        sim = s;
+    }
+}
+
+ */
