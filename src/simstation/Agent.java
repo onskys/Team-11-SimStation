@@ -105,7 +105,7 @@ public abstract class Agent implements Serializable, Runnable {
     // Moves the Agent in a direction depending on their heading. 8 cases.
     // Still requires wrapping functionality.
     public void move(int steps) {
-        System.out.println("We're moving!");
+        // System.out.println("We're moving!");
         if (heading == Heading.NORTH) {
             yc = yc - steps;
         }
