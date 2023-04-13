@@ -11,6 +11,7 @@ import java.util.*;
                           Added method headers
 4/11/2023 - Owen Semersky: Implemented some methods
 4/12/2023 - Owen Semersky: Minor edits
+4/12/2023 - Sanjana Jagarlapudi: Implemented getNeighbor method
  */
 
 public class Simulation extends Model {
@@ -79,7 +80,17 @@ public class Simulation extends Model {
     // Gets a nearby neighboring agent in the simulation.
     public Agent getNeighbor(Agent a, Double radius) {
         // Code here
-        return null; // Returns nearby agent
+        boolean done = false;
+        while(!done){
+            int index = Utilities.rng.nextInt(1, agentList.size());
+            Agent randAgent = agentList.get(index);
+            double distance = Math.sqrt(Math.pow((randAgent.getXc() - a.getXc()), 2) +
+                    Math.pow((randAgent.getYc() - a.getYc()), 2));
+            if(distance <= 10){
+                return randAgent;
+            }
+        }
+        return null;
     }
 
     // Populate is empty, specified in subclasses.
