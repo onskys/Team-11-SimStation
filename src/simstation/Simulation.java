@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Simulation extends Model {
 
-    private Timer timer;
+    transient private Timer timer;
     private ArrayList<Agent> agents;
     private int clock; // clock: int = 0
 
