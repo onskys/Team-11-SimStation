@@ -28,4 +28,8 @@ public class SimulationView extends View {
             gc2d.fillRect(a.getX(), a.getY(), 5, 5);
         }
     }
+
 }
+
+}
+

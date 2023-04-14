@@ -4,7 +4,6 @@ import mvc.*;
 
 /* Class "SimStaionFactory" Datalog
 4/4/2023 - Owen Semersky: Created file
-
 4/7/2023 - Owen Semersky: Added methods, may need edits
  */
 

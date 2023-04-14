@@ -65,6 +65,8 @@ public class Simulation extends Model {
         System.out.println("Simulation Resuming");
         for (Agent a : agents) {
             a.resume();
+
+
         }
     }
 
@@ -89,6 +91,45 @@ public class Simulation extends Model {
             if(distance <= 10){
                 return randAgent;
             }
+
+        }
+        return null;
+    }
+
+    // Populate is empty, specified in subclasses.
+    public void populate() {}
+
+    // Adds an agent to this simulation.
+    public void addAgent(Agent a) {
+        a.setWorld(this);
+        agents.add(a);
+    }
+
+    public ArrayList<Agent> getAgents() {
+        return agents;
+    }
+
+
+    // Stops the simulation entirely.
+    public void stop() {
+        stopTimer();
+        System.out.println("Simulation Stopping");
+        for (Agent a : agents) {
+            a.stop();
+        }
+    }
+
+    // Gets a nearby neighboring agent in the simulation.
+    public Agent getNeighbor(Agent a, Double radius) {
+        boolean done = false;
+        while(!done){
+            int index = Utilities.rng.nextInt(1, agents.size());
+            Agent randAgent = agents.get(index);
+            double distance = Math.sqrt(Math.pow((randAgent.getX() - a.getX()), 2) +
+                    Math.pow((randAgent.getY() - a.getY()), 2));
+            if(distance <= 10){
+                return randAgent;
+            }
         }
         return null;
     }
@@ -108,4 +149,13 @@ public class Simulation extends Model {
 
     // Specific stats specified in customizations.
     public void showStats() {}
+
+    public int getClock() {
+        return clock;
+    }
 }
+
+    // Specific stats specified in customizations.
+    public void showStats() {}
+}
+

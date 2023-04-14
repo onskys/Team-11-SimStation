@@ -244,4 +244,10 @@ public abstract class Agent implements Serializable, Runnable {
     public void onExit() {}
 
     public void onInterrupted() {}
+
+    public Heading getHeading() {
+        return heading;
+    }
+}
+
 }
