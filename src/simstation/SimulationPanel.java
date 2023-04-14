@@ -8,6 +8,7 @@ import java.awt.*;
 4/4/2023 - Owen Semersky: Created file
 4/7/2023 - Owen Semersky: Added buttons and main
 4/9/2023 - Owen Semersky: Minor edits to use controlPanel
+
  */
 
 public class SimulationPanel extends AppPanel {

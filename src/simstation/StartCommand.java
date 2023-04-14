@@ -18,4 +18,8 @@ public class StartCommand extends Command {
         Simulation sim = (Simulation) model;
         sim.start();
     }
+
 }
+
+
+
