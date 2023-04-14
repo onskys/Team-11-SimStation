@@ -13,6 +13,9 @@ import java.util.Random;
                           Changed class and update method to be abstract
 4/11/2023 - Owen Semersky: Implemented some methods, added some methods
 4/12/2023 - Owen Semersky: Made edits to methods, added synchronization
+                           Changed move method to move in increments
+                           Changed move method to allow wrapping
+4/13/2023 - Owen Semersky: Randomized starting location
  */
 
 public abstract class Agent implements Serializable, Runnable {
@@ -23,7 +26,7 @@ public abstract class Agent implements Serializable, Runnable {
     private int yc;
     private boolean suspended;
     private boolean stopped;
-    protected Thread myThread;
+    transient protected Thread myThread;
     protected Simulation world;
 
     // Constructor
@@ -33,9 +36,10 @@ public abstract class Agent implements Serializable, Runnable {
         stopped = false;
         myThread = null;
 
-        // Hard coded for now, should change to a random spot in the view.
-        xc = 100;
-        yc = 100;
+        Random random = new Random();
+
+        xc = random.nextInt(241);
+        yc = random.nextInt(241);
     }
 
     // Run method, active agent movement or change.
@@ -47,7 +51,7 @@ public abstract class Agent implements Serializable, Runnable {
             try {
                 // System.out.println("We have a problem");
                 update();
-                Thread.sleep(100); // Suggested speed is 20, too fast for now.
+                Thread.sleep(50); // Suggested speed is 20, too fast for now.
                 checkSuspended();
             }
             catch (InterruptedException e) {
@@ -107,35 +111,108 @@ public abstract class Agent implements Serializable, Runnable {
     public void move(int steps) {
         // System.out.println("We're moving!");
         if (heading == Heading.NORTH) {
-            yc = yc - steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc - 1;
+
+                if (yc < 0) {
+                    yc = 240;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.NORTHEAST) {
-            yc = yc - steps;
-            xc = xc + steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc - 1;
+                xc = xc + 1;
+
+                if (yc < 0) {
+                    yc = 240;
+                }
+                if (xc > 240) {
+                    xc = 0;
+                }
+                world.changed();
+            }
         }
         else if (heading == Heading.EAST) {
-            xc = xc + steps;
+            for (int i = 0; i < steps; i++) {
+                xc = xc + 1;
+
+                if (xc > 240) {
+                    xc = 0;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.SOUTHEAST) {
-            yc = yc + steps;
-            xc = xc + steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc + 1;
+                xc = xc - 1;
+
+                if (yc > 240) {
+                    yc = 0;
+                }
+                if (xc < 0) {
+                    xc = 240;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.SOUTH) {
-            yc = yc + steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc + 1;
+
+                if (yc > 240) {
+                    yc = 0;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.SOUTHWEST) {
-            yc = yc + steps;
-            xc = xc - steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc + 1;
+                xc = xc + 1;
+
+                if (yc > 240) {
+                    yc = 0;
+                }
+                if (xc > 240) {
+                    xc = 0;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.WEST) {
-            xc = xc - steps;
+            for (int i = 0; i < steps; i++) {
+                xc = xc - 1;
+
+                if (xc < 0) {
+                    xc = 240;
+                }
+
+                world.changed();
+            }
         }
         else if (heading == Heading.NORTHWEST) {
-            yc = yc - steps;
-            xc = xc - steps;
+            for (int i = 0; i < steps; i++) {
+                yc = yc - 1;
+                xc = xc - 1;
+
+                if (yc < 0) {
+                    yc = 240;
+                }
+                if (xc < 0) {
+                    xc = 240;
+                }
+
+                world.changed();
+            }
         }
-        world.changed();
-        // notify();
     }
 
     public String getName() {
@@ -167,4 +244,8 @@ public abstract class Agent implements Serializable, Runnable {
     public void onExit() {}
 
     public void onInterrupted() {}
+
+    public Heading getHeading() {
+        return heading;
+    }
 }

@@ -11,12 +11,12 @@ import java.util.*;
                           Added method headers
 4/11/2023 - Owen Semersky: Implemented some methods
 4/12/2023 - Owen Semersky: Minor edits
-
+4/12/2023 - Sanjana Jagarlapudi: Implemented getNeighbor method
  */
 
 public class Simulation extends Model {
 
-    private Timer timer;
+    transient private Timer timer;
     private ArrayList<Agent> agents;
     private int clock; // clock: int = 0
 
@@ -79,8 +79,17 @@ public class Simulation extends Model {
 
     // Gets a nearby neighboring agent in the simulation.
     public Agent getNeighbor(Agent a, Double radius) {
-        // Code here
-        return null; // Returns nearby agent
+        boolean done = false;
+        while(!done){
+            int index = Utilities.rng.nextInt(1, agents.size());
+            Agent randAgent = agents.get(index);
+            double distance = Math.sqrt(Math.pow((randAgent.getX() - a.getX()), 2) +
+                    Math.pow((randAgent.getY() - a.getY()), 2));
+            if(distance <= 10){
+                return randAgent;
+            }
+        }
+        return null;
     }
 
     // Populate is empty, specified in subclasses.
@@ -98,4 +107,8 @@ public class Simulation extends Model {
 
     // Specific stats specified in customizations.
     public void showStats() {}
+
+    public int getClock() {
+        return clock;
+    }
 }

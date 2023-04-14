@@ -2,12 +2,14 @@ package randomWalks;
 
 import mvc.*;
 import simstation.*;
+import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
 /* Class "RandomWalkSimulation" Datalog
 4/4/2023 - Owen Semersky: Created file
                           Added given code
+4/13/2023 - Owen Semersky: Added stats
 
  */
 
@@ -40,20 +42,17 @@ public class RandomWalkSimulation extends Simulation {
             addAgent(new Drunk());
     }
 
+    public void showStats() {
+        int numAgents = getAgents().size();
+        int time = getClock();
+
+        JFrame frame = new JFrame("");
+        JOptionPane.showMessageDialog(frame, "#agents = " + numAgents + "\nclock = " + time);
+    }
+
     public static void main(String[] args) {
         AppPanel panel = new SimulationPanel(new RandomWalkFactory());
         panel.display();
     }
 
 }
-
-/*
-class RandomWalkView extends SimulationView {
-    RandomWalkSimulation sim;
-    public RandomWalkView(RandomWalkSimulation s) {
-        super(s);
-        sim = s;
-    }
-}
-
- */
