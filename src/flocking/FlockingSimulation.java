@@ -9,6 +9,7 @@ import java.util.Random;
 /* Class "FlockingSimulation" Datalog
 4/12/2023 - Owen Semersky: Created file
                            Added inner classes and some code
+4/13/2023 - Owen Semersky: Edited and added methods
 
  */
 
