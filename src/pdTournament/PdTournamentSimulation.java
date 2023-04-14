@@ -2,7 +2,6 @@ package pdTournament;
 
 import simstation.*;
 import mvc.*;
-
 import javax.swing.*;
 
 /* Class "PdTournamentSimulation" Datalog
