@@ -19,38 +19,46 @@ public class PdTournamentSimulation extends Simulation {
     public void populate() {
         int numPrisoners = 20; // Please change only this num to change num of prisoners
                                // This number should be divisible by 4 for best functionality
-        int fourth = numPrisoners / 4;
 
-        for(int i = 0; i < fourth; i++) {
-            addAgent(new Prisoner(new Cooperate()));
-            Prisoner p = (Prisoner) getAgents().get(i);
-            p.strategy.setClassification("Cooperate");
-        }
-        for (int i = fourth; i < 2 * fourth; i++) {
-            addAgent(new Prisoner(new Cheat()));
-            Prisoner p = (Prisoner) getAgents().get(i);
-            p.strategy.setClassification("Cheat");
-        }
-        for (int i = 2 * fourth; i < 3 * fourth; i++) {
-            addAgent(new Prisoner(new RandomlyCooperate()));
-            Prisoner p = (Prisoner) getAgents().get(i);
-            p.strategy.setClassification("Random");
-        }
-        for (int i = 3 * fourth; i < numPrisoners; i++) {
-            addAgent(new Prisoner(new Tit4Tat()));
-            Prisoner p = (Prisoner) getAgents().get(i);
-            p.strategy.setClassification("Tit4Tat");
-        }
+        int mod;
+        Prisoner p;
 
+        for (int i = 0; i < numPrisoners; i++) {
+            mod = i % 4;
+            switch (mod) {
+                case 0:
+                    addAgent(new Prisoner(new Cooperate()));
+                    p = (Prisoner) getAgents().get(i);
+                    p.strategy.setClassification("Cooperate");
+                    break;
+                case 1:
+                    addAgent(new Prisoner(new Cheat()));
+                    p = (Prisoner) getAgents().get(i);
+                    p.strategy.setClassification("Cheat");
+                    break;
+                case 2:
+                    addAgent(new Prisoner(new RandomlyCooperate()));
+                    p = (Prisoner) getAgents().get(i);
+                    p.strategy.setClassification("Random");
+                    break;
+                case 3:
+                    addAgent(new Prisoner(new Tit4Tat()));
+                    p = (Prisoner) getAgents().get(i);
+                    p.strategy.setClassification("Tit4Tat");
+                    break;
+            }
+        }
 
         for (Agent a : getAgents()) {
-            Prisoner p = (Prisoner) a;
+            p = (Prisoner) a;
             System.out.println(p.strategy);
         }
     }
 
     public void showStats() {
         int fourths = getAgents().size() / 4;
+
+        System.out.println("Fourths: " + fourths);
 
         int coopFitness = 0;
         int cheatFitness = 0;
@@ -62,19 +70,24 @@ public class PdTournamentSimulation extends Simulation {
             switch (p.strategy.classification) {
                 case "Cooperate":
                     coopFitness += p.getFitness();
+                    break;
                 case "Cheat":
                     cheatFitness += p.getFitness();
+                    break;
                 case "Random":
                     randomFitness += p.getFitness();
+                    break;
                 default:
                     tit4tatFitness += p.getFitness();
+                    break;
             }
         }
 
         JFrame frame = new JFrame("");
         JOptionPane.showMessageDialog(frame, "Avg Fitness:" + "\nCoop: " + coopFitness / fourths
                                       + "\nCheat: " + cheatFitness / fourths + "\nRandom: "
-                                      + randomFitness / fourths + "\nTit4Tat: " + tit4tatFitness / fourths);
+                                      + randomFitness / fourths + "\nTit4Tat: " + tit4tatFitness / fourths
+                                      + "\n\n#Agents: " + getAgents().size() + "\nclock: " + getClock());
     }
 
     public static void main(String[] args) {
@@ -85,47 +98,46 @@ public class PdTournamentSimulation extends Simulation {
 
 class Prisoner extends Agent {
     private int fitness;
-    private boolean partnerCheated;
+    private boolean previousCheat;
     Strategy strategy;
     public Prisoner(Strategy strat) {
         super("Prisoner");
         heading = Heading.random();
+
         fitness = 0;
-        partnerCheated = false;
+        previousCheat = false;
 
         strategy = strat;
         strategy.setPrisoner(this);
     }
 
     public void update() {
+        Prisoner neighbor = (Prisoner) world.getNeighbor(this, 15.0);
+
+        if (cooperate() && neighbor.cooperate()) {
+            updateFitness(3);
+            neighbor.updateFitness(3);
+            previousCheat = false;
+        }
+        else if (cooperate() && !neighbor.cooperate()) {
+            neighbor.updateFitness(5);
+            previousCheat = true;
+        }
+        else if (!cooperate() && neighbor.cooperate()) {
+            updateFitness(5);
+            previousCheat = false;
+        }
+        else {
+            updateFitness(1);
+            neighbor.updateFitness(1);
+            previousCheat = true;
+        }
+
+        System.out.println("Fitness: " + fitness);
+
         heading = Heading.random();
         int steps = Utilities.rng.nextInt(10) + 1;
         move(steps);
-
-        Prisoner neighbor = (Prisoner) world.getNeighbor(this, 15.0);
-
-        if (cooperate() && !partnerCheated) {
-            // System.out.println("Adding 3");
-            updateFitness(3);
-            neighbor.updateFitness(3);
-        }
-        else if (cooperate() && partnerCheated) {
-            // System.out.println("Adding 0 and 5");
-            neighbor.updateFitness(5);
-            partnerCheated = true;
-        }
-        else if (!cooperate() && !partnerCheated) {
-            // System.out.println("Adding 5 and 0");
-            updateFitness(5);
-        }
-        else {
-            // System.out.println("Adding 1 and 1");
-            updateFitness(1);
-            neighbor.updateFitness(1);
-            partnerCheated = true;
-        }
-
-        // System.out.println("Fitness: " + fitness);
     }
 
     public void updateFitness(int amount) {
@@ -137,7 +149,7 @@ class Prisoner extends Agent {
     }
 
     public boolean getPreviousCheat() {
-        return partnerCheated;
+        return previousCheat;
     }
 
     public int getFitness() {
