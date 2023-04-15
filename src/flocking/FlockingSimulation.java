@@ -10,6 +10,7 @@ import java.util.Random;
 4/12/2023 - Owen Semersky: Created file
                            Added inner classes and some code
 4/13/2023 - Owen Semersky: Edited and added methods
+4/15/2023 - Owen Semersky: Edited showStats
 
  */
 
@@ -48,9 +49,10 @@ public class FlockingSimulation extends Simulation {
         }
 
         JFrame frame = new JFrame("");
-        JOptionPane.showMessageDialog(frame, "#birds @ speed 1 = " + speed1 + "\n3birds @ speed 2 = "
-                                      + speed2 + "\n#birds @ speed 3 = " + speed3 + "\n#birds @ speed 4 = "
-                                      + speed4 + "\n#birds @ speed 5 = " + speed5);
+        JOptionPane.showMessageDialog(frame, "#birds @ speed 1: " + speed1 + "\n#birds @ speed 2: "
+                                      + speed2 + "\n#birds @ speed 3: " + speed3 + "\n#birds @ speed 4: "
+                                      + speed4 + "\n#birds @ speed 5: " + speed5 + "\n\n#agents: "
+                                      + getAgents().size() + "\nclock: " + getClock());
 
     }
 
@@ -72,7 +74,7 @@ class Bird extends Agent
     }
 
     public void update() {
-        Bird neighbor = (Bird) world.getNeighbor(this, 10.0);
+        Bird neighbor = (Bird) world.getNeighbor(this, 15.0);
 
         if (neighbor != null) {
             speed = neighbor.getSpeed();
