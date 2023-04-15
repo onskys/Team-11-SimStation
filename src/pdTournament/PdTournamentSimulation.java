@@ -48,17 +48,10 @@ public class PdTournamentSimulation extends Simulation {
                     break;
             }
         }
-
-        for (Agent a : getAgents()) {
-            p = (Prisoner) a;
-            System.out.println(p.strategy);
-        }
     }
 
     public void showStats() {
         int fourths = getAgents().size() / 4;
-
-        System.out.println("Fourths: " + fourths);
 
         int coopFitness = 0;
         int cheatFitness = 0;
@@ -132,8 +125,6 @@ class Prisoner extends Agent {
             neighbor.updateFitness(1);
             previousCheat = true;
         }
-
-        System.out.println("Fitness: " + fitness);
 
         heading = Heading.random();
         int steps = Utilities.rng.nextInt(10) + 1;
