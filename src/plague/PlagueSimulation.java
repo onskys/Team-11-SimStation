@@ -24,7 +24,7 @@ class Host extends Agent {
     int resistance;
 
     public Host() {
-        super("Drunk");
+        super("Host");
         heading = Heading.random();
         infected = false;
         this.color = Color.GREEN;
@@ -112,7 +112,7 @@ public class PlagueSimulation extends Simulation {
 
         JFrame frame = new JFrame(""); //Finish stats
         JOptionPane.showMessageDialog(frame, "#Hosts = " + numAgents + "\nclock = " + time +
-                                         "\n%infected = %" + percentInfected);
+                "\n%infected = %" + percentInfected);
     }
 
     public static void main(String[] args) {
