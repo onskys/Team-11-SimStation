@@ -9,6 +9,7 @@ import java.awt.*;
 4/7/2023 - Owen Semersky: Added method headers and some basic code
 4/11/2023 - Owen Semersky: Minor edits
 4/12/2023 - Owen Semersky: Edits to paintComponent, drawing agents
+4/15/2023 - Owen Semersky: Added getSim method
  */
 
 public class SimulationView extends View {
@@ -27,6 +28,10 @@ public class SimulationView extends View {
         for (Agent a : sim.getAgents()) {
             gc2d.fillRect(a.getX(), a.getY(), 5, 5);
         }
+    }
+
+    public Simulation getSim() {
+        return sim;
     }
 
 }
