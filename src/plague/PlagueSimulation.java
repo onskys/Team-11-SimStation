@@ -3,15 +3,19 @@ package plague;
 
 import simstation.*;
 import mvc.*;
-
 import javax.swing.*;
 import java.awt.*;
+
 
 /* Class "PlagueSimulation" Datalog
 4/12/2023 - Owen Semersky: Created file
 4/16/2023 - Sanjana Jagarlapudi: Created Host Class, added construtor
-                                    added update method and implemented it
-                                    added setter and getter methods for infected field.
+                                    added update method and implemented it,
+                                    added setter and getter methods
+                                    Created PlagueSimulationView class and implemented paintComponent
+                                    method along with the other methods.
+                                    CreatedPlagueSimulation class and implemented showStats and other methods
+                                    Created PlagueSimulationFactory class and implemented methods
 
  */
 class Host extends Agent {
@@ -19,8 +23,6 @@ class Host extends Agent {
     Color color;
     int virulence;
     int resistance;
-
-
 
     public Host() {
         super("Drunk");
@@ -97,10 +99,21 @@ public class PlagueSimulation extends Simulation {
     }
     public void showStats() {
         int numAgents = getAgents().size();
+        int infectedNum = 0;
+        for(int i = 0; i < getAgents().size(); i++){
+            Host h = (Host) getAgents().get(i);
+            if(h.isInfected()){
+                infectedNum++;
+            }
+        }
+        double percentInfected = (infectedNum / (double) getAgents().size()) * 100;
+        String sValue = (String) String.format("%.2f", percentInfected);
+        percentInfected = Double.parseDouble(sValue);
         int time = getClock();
 
         JFrame frame = new JFrame(""); //Finish stats
-        JOptionPane.showMessageDialog(frame, "#Hosts = " + numAgents + "\nclock = " + time + "\n#infected = ");
+        JOptionPane.showMessageDialog(frame, "#Hosts = " + numAgents + "\nclock = " + time +
+                                         "\n%infected = %" + percentInfected);
     }
 
     public static void main(String[] args) {
