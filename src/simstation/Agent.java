@@ -248,6 +248,5 @@ public abstract class Agent implements Serializable, Runnable {
     public Heading getHeading() {
         return heading;
     }
-}
 
 }

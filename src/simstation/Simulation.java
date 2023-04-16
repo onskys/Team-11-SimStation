@@ -79,45 +79,10 @@ public class Simulation extends Model {
         }
     }
 
-    // Gets a nearby neighboring agent in the simulation.
-    public Agent getNeighbor(Agent a, Double radius) {
-        // Code here
-        boolean done = false;
-        while(!done){
-            int index = Utilities.rng.nextInt(1, agentList.size());
-            Agent randAgent = agentList.get(index);
-            double distance = Math.sqrt(Math.pow((randAgent.getXc() - a.getXc()), 2) +
-                    Math.pow((randAgent.getYc() - a.getYc()), 2));
-            if(distance <= 10){
-                return randAgent;
-            }
-
-        }
-        return null;
-    }
-
     // Populate is empty, specified in subclasses.
     public void populate() {}
 
-    // Adds an agent to this simulation.
-    public void addAgent(Agent a) {
-        a.setWorld(this);
-        agents.add(a);
-    }
 
-    public ArrayList<Agent> getAgents() {
-        return agents;
-    }
-
-
-    // Stops the simulation entirely.
-    public void stop() {
-        stopTimer();
-        System.out.println("Simulation Stopping");
-        for (Agent a : agents) {
-            a.stop();
-        }
-    }
 
     // Gets a nearby neighboring agent in the simulation.
     public Agent getNeighbor(Agent a, Double radius) {
@@ -134,8 +99,6 @@ public class Simulation extends Model {
         return null;
     }
 
-    // Populate is empty, specified in subclasses.
-    public void populate() {}
 
     // Adds an agent to this simulation.
     public void addAgent(Agent a) {
@@ -147,13 +110,10 @@ public class Simulation extends Model {
         return agents;
     }
 
-    // Specific stats specified in customizations.
-    public void showStats() {}
 
     public int getClock() {
         return clock;
     }
-}
 
     // Specific stats specified in customizations.
     public void showStats() {}

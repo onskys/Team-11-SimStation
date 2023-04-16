@@ -19,7 +19,6 @@ public class ResumeCommand extends Command {
         sim.resume();
     }
 
-}
 
 }
 
