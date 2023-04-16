@@ -21,16 +21,18 @@ class Host extends Agent {
     int resistance;
 
 
+
     public Host() {
         super("Drunk");
         heading = Heading.random();
         infected = false;
         this.color = Color.GREEN;
-        //Resistance and Virulence are random numbers between 0 and 100
-        //Resistance is the immunity the Host has towards the plague
-        //Virulence is the sevierity of the plague.
-        resistance = Utilities.rng.nextInt(100) ;
-        virulence = Utilities.rng.nextInt(100);
+        //Resistance is the host's immunity towards the plague
+        //Virulence is the severity of the plague.
+        //Can higher or lower the bounds of resist. and vir. based on host and severity of plague
+        resistance = Utilities.rng.nextInt(100);
+        virulence = Utilities.rng.nextInt(30);
+
     }
 
     public boolean isInfected() {
@@ -40,6 +42,7 @@ class Host extends Agent {
     public void setInfected(boolean infected) {
         this.infected = infected;
         this.color = Color.RED;
+        //numInfected++;
     }
 
     public Color getColor() {
@@ -55,9 +58,7 @@ class Host extends Agent {
         Host neighbor = (Host) world.getNeighbor(this, 10.0);
         //Trying to infect the neighbor based on their resistance and virulence
         if (neighbor != null && !neighbor.infected) {
-            int infectedChance = this.resistance - this.virulence;
-            int randomInfect = Utilities.rng.nextInt(100);
-            if(randomInfect > infectedChance) {
+            if(virulence > resistance) {
                 neighbor.setInfected(true);
             }
         }
@@ -86,6 +87,7 @@ class PlagueSimulationView extends SimulationView {
 
 class PlagueSimulationFactory extends SimStationFactory {
     public Model makeModel() { return new PlagueSimulation(); }
+    public View makeView(Model m) { return new PlagueSimulationView((PlagueSimulation) m);}
     public String getTitle() { return "Plague";}
 }
 public class PlagueSimulation extends Simulation {
