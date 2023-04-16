@@ -7,18 +7,18 @@ import mvc.*;
                           Added outline
 4/9/2023 - Owen Semersky: Added method headers
 4/9/2023 - Sanjana Jagarlapudi: continued implementation of execute method.
-
  */
 
 public class StopCommand extends Command {
     public StopCommand(Model model) {
         super(model);
-        // Continued
     }
 
     public void execute() {
         Simulation sim = (Simulation) model;
         sim.stop();
-        // Continued
     }
+
 }
+
+
