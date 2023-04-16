@@ -42,6 +42,10 @@ class Host extends Agent {
         this.color = Color.RED;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public void update() { //Fix to look better
         //If host is uninfected, then they do the drunk walk
         heading = Heading.random();
@@ -59,6 +63,27 @@ class Host extends Agent {
         }
     }
 }
+class PlagueSimulationView extends SimulationView {
+
+    PlagueSimulation plg;
+
+    public PlagueSimulationView(PlagueSimulation s) {
+        super(s);
+        plg = s;
+        plg.populate();
+    }
+
+    public void paintComponent(Graphics gc) {
+        super.paintComponent(gc);
+        Graphics2D gc2d = (Graphics2D) gc;
+        for(int i = 0; i < getSim().getAgents().size(); i++){
+            Host h = (Host) getSim().getAgents().get(i);
+            gc2d.setColor(h.getColor());
+            gc2d.fillRect(h.getX(), h.getY(), 5, 5);
+        }
+    }
+}
+
 class PlagueSimulationFactory extends SimStationFactory {
     public Model makeModel() { return new PlagueSimulation(); }
     public String getTitle() { return "Plague";}
