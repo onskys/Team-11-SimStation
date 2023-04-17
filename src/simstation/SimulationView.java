@@ -1,6 +1,8 @@
 package simstation;
 
 import mvc.*;
+import randomWalks.RandomWalkSimulation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
@@ -33,17 +35,21 @@ public class SimulationView extends View {
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
         repaint();
+        System.out.print("check");
 
         if (evt.getPropertyName() == null) {
             repaint();
             return;
         }
+
         if (evt.getPropertyName().equals("New") || evt.getPropertyName().equals("Open")) {
-            //removeAll();
-            //sim.getAgents().clear();
-            Simulation s = new Simulation();
-            s.populate();
-            //s.start();
+            removeAll();
+            Simulation s = new RandomWalkSimulation();
+            setSim(s);
+//            sim.getAgents().clear();
+//
+//            sim.populate();
+//            sim.start();
         }
     }
 
@@ -51,4 +57,9 @@ public class SimulationView extends View {
         return sim;
     }
 
+    public void setSim(Simulation sim) {
+        this.sim = sim;
+        sim.populate();
+        sim.start();
+    }
 }

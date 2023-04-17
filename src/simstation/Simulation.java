@@ -45,6 +45,7 @@ public class Simulation extends Model {
 
     // Starts the simulation.
     public void start() {
+        clock = 0; //
         System.out.println("Simulation Starting");
         startTimer();
         for (Agent a : agents) {
@@ -59,6 +60,7 @@ public class Simulation extends Model {
         for (Agent a : agents) {
             a.suspend();
         }
+        stopTimer(); //changed
     }
 
     // Resumes the simulation.

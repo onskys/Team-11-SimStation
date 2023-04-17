@@ -15,6 +15,7 @@ public class StartCommand extends Command {
     }
 
     public void execute() {
+        System.out.println("test");
         Simulation sim = (Simulation) model;
         sim.start();
     }

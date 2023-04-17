@@ -152,8 +152,8 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
                         model.removePropertyChangeListener(view);
                         model = factory.makeModel();
                         setModel(model); // set model
-                        model.addPropertyChangeListener(view);
-                        model.initSupport();
+//                        model.addPropertyChangeListener(view);
+//                        model.initSupport();
                         model.firePropertyChange("New", oldModel, model);
                     }
                     break;
