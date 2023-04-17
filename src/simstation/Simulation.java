@@ -20,6 +20,7 @@ public class Simulation extends Model {
     transient private Timer timer;
     private ArrayList<Agent> agents;
     private int clock; // clock: int = 0
+    private boolean hasStarted;
 
     public Simulation() {
         agents = new ArrayList<Agent>();
@@ -46,6 +47,7 @@ public class Simulation extends Model {
     // Starts the simulation.
     public void start() {
         System.out.println("Simulation Starting");
+        hasStarted = true;
         startTimer();
         for (Agent a : agents) {
             Thread thread = new Thread(a);
@@ -106,10 +108,24 @@ public class Simulation extends Model {
         return agents;
     }
 
+    public void setAgents(ArrayList<Agent> newAgents) {
+        agents = newAgents;
+    }
+
     // Specific stats specified in customizations.
     public void showStats() {}
 
     public int getClock() {
         return clock;
+    }
+
+    public void setStarted(boolean change) {hasStarted = change; }
+
+    public boolean hasStarted() {
+        return hasStarted;
+    }
+
+    public void clearAgents() {
+        agents = new ArrayList<Agent>();
     }
 }
