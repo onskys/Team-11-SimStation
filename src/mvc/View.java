@@ -3,7 +3,6 @@ package mvc;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -20,7 +19,6 @@ public class View extends JPanel implements PropertyChangeListener {
     public View(Model model) {
         super();
         this.model = model;
-        //model.addPropertyChangeListener(this);
         // optional border around the view component
         setBorder(LineBorder.createGrayLineBorder());//.createBlackLineBorder());
     }
@@ -34,7 +32,7 @@ public class View extends JPanel implements PropertyChangeListener {
             this.model.addPropertyChangeListener(this);
         }
     }
-    @Override
+
     public void propertyChange(PropertyChangeEvent arg0) { this.repaint(); }
 
 }
