@@ -3,6 +3,7 @@ package simstation;
 import mvc.*;
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 
 /* Class "SimulationView" Datalog
 4/4/2023 - Owen Semersky: Created file
@@ -27,6 +28,22 @@ public class SimulationView extends View {
         Graphics2D gc2d = (Graphics2D) gc;
         for (Agent a : sim.getAgents()) {
             gc2d.fillRect(a.getX(), a.getY(), 5, 5);
+        }
+    }
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+        repaint();
+
+        if (evt.getPropertyName() == null) {
+            repaint();
+            return;
+        }
+        if (evt.getPropertyName().equals("New") || evt.getPropertyName().equals("Open")) {
+            //removeAll();
+            //sim.getAgents().clear();
+            Simulation s = new Simulation();
+            s.populate();
+            //s.start();
         }
     }
 

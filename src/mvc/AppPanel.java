@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 /* Class "AppPanel" Datalog
 4/4/2023 - Owen Semersky: Created File
@@ -92,31 +93,84 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
     }
 
     public void actionPerformed(ActionEvent ae) {
-        try {
-            String cmmd = ae.getActionCommand();
+//        try {
+//            String cmmd = ae.getActionCommand();
+//
+//            if (Objects.equals(cmmd, "Save")) {
+//                Utilities.save(model, false);
+//            } else if (Objects.equals(cmmd, "SaveAs")) {
+//                Utilities.save(model, true);
+//            }
+//            else if (Objects.equals(cmmd, "Open")) {
+//                Model newModel = Utilities.open(model);
+//                if (newModel != null) setModel(newModel);
+//            }
+//            else if (Objects.equals(cmmd, "New")) {
+//                Utilities.saveChanges(model);
+//                setModel(factory.makeModel());
+//                // needed cuz setModel sets to true:
+//                model.setUnsavedChanges(false);
+//            } else if (cmmd == "Quit") {
+//                Utilities.saveChanges(model);
+//                System.exit(1);
+//            } else if (cmmd == "About") {
+//                Utilities.inform(factory.about());
+//            } else if (cmmd == "Help") {
+//                Utilities.inform(factory.getHelp());
+//            } else { // must be from Edit menu
+//                Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
+//                command.execute();
+            //}
+        String cmmd = ae.getActionCommand();
 
-            if (cmmd == "Save") {
-                Utilities.save(model, false);
-            } else if (cmmd == "SaveAs") {
-                Utilities.save(model, true);
-            } else if (cmmd == "Open") {
-                Model newModel = Utilities.open(model);
-                if (newModel != null) setModel(newModel);
-            } else if (cmmd == "New") {
-                Utilities.saveChanges(model);
-                setModel(factory.makeModel());
-                // needed cuz setModel sets to true:
-                model.setUnsavedChanges(false);
-            } else if (cmmd == "Quit") {
-                Utilities.saveChanges(model);
-                System.exit(1);
-            } else if (cmmd == "About") {
-                Utilities.inform(factory.about());
-            } else if (cmmd == "Help") {
-                Utilities.inform(factory.getHelp());
-            } else { // must be from Edit menu
-                Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
-                command.execute();
+        try {
+            switch (cmmd) {
+                case "Save":
+                    Utilities.save(model, false);
+                case "Save As":
+                    Utilities.save(model, true);
+                case "Open":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        String fName = Utilities.getFileName((String) null, true);
+                        ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = (Model) is.readObject();
+                        setModel(model);
+                        model.addPropertyChangeListener(view);
+                        model.initSupport();
+                        model.firePropertyChange("Open", oldModel, model);
+                        is.close();
+                    }
+                    break;
+                // Model newModel = Utilities.open(model);
+                // if (newModel != null) setModel(newModel);
+                // break;
+                case "New":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = factory.makeModel();
+                        setModel(model); // set model
+                        model.addPropertyChangeListener(view);
+                        model.initSupport();
+                        model.firePropertyChange("New", oldModel, model);
+                    }
+                    break;
+                case "Quit":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        System.exit(1);
+                    }
+                    break;
+                case "About":
+                    Utilities.inform(factory.about());
+                    break;
+                case "Help":
+                    Utilities.inform(factory.getHelp());
+                    break;
+                default:
+                    Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
+                    command.execute();
             }
         } catch (Exception e) {
             handleException(e);

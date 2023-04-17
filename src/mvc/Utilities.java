@@ -110,12 +110,25 @@ public class Utilities {
         Model newModel = null;
         try {
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
+            Model oldModel = model;
             newModel = (Model)is.readObject();
+            model.firePropertyChange("Open", oldModel, model);
             is.close();
         } catch (Exception err) {
             Utilities.error(err);
         }
         return newModel;
+
+//        if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+//            String fName = Utilities.getFileName((String) null, true);
+//            ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
+//            Model oldModel = model;
+//            model = (Model) is.readObject();
+//            setModel(model);
+//            model.firePropertyChange("Open", oldModel, model);
+//            is.close();
+//
+//        }
     }
 
     // simple menu maker

@@ -5,6 +5,7 @@ import simstation.*;
 import mvc.*;
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
 
 
 /* Class "PlagueSimulation" Datalog
@@ -23,6 +24,8 @@ class Host extends Agent {
     Color color;
     int virulence;
     int resistance;
+    public static final int virulenceRange = 30;
+    public static final int resistanceRange = 100;
 
     public Host() {
         super("Drunk");
@@ -32,8 +35,8 @@ class Host extends Agent {
         //Resistance is the host's immunity towards the plague
         //Virulence is the severity of the plague.
         //Can higher or lower the bounds of resist. and vir. based on host and severity of plague
-        resistance = Utilities.rng.nextInt(100);
-        virulence = Utilities.rng.nextInt(30);
+        resistance = Utilities.rng.nextInt(resistanceRange);
+        virulence = Utilities.rng.nextInt(virulenceRange);
 
     }
 
@@ -51,7 +54,7 @@ class Host extends Agent {
         return color;
     }
 
-    public void update() { //Fix to look better
+    public void update() {
         //If host is uninfected, then they do the drunk walk
         heading = Heading.random();
         int steps = Utilities.rng.nextInt(10) + 1;
@@ -69,6 +72,7 @@ class Host extends Agent {
 class PlagueSimulationView extends SimulationView {
 
     PlagueSimulation plg;
+    private static int DIM;
 
     public PlagueSimulationView(PlagueSimulation s) {
         super(s);
