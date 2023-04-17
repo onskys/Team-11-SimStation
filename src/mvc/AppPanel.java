@@ -6,16 +6,14 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 /* Class "AppPanel" Datalog
 4/4/2023 - Owen Semersky: Created File
                           Imported Owen's version of AppPanel
 4/6/2023 - Owen Semersky: Added professor's version of AppPanel
-
-
+4/16/2023 - Owen Semersky: Major edits to actionPerformed
+                           Added some of Sanjana's version of AppPanel
  */
 
 public class AppPanel extends JPanel implements PropertyChangeListener, ActionListener  {
@@ -70,7 +68,6 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
         this.model.addPropertyChangeListener(this);
         view.setModel(this.model);
         model.changed();
-        //alternatively: this.model.copy(model);
     }
 
     protected JMenuBar createMenuBar() {
@@ -92,32 +89,57 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
     }
 
     public void actionPerformed(ActionEvent ae) {
-        try {
-            String cmmd = ae.getActionCommand();
+        String cmmd = ae.getActionCommand();
 
-            if (cmmd == "Save") {
-                Utilities.save(model, false);
-            } else if (cmmd == "SaveAs") {
-                Utilities.save(model, true);
-            } else if (cmmd == "Open") {
-                Model newModel = Utilities.open(model);
-                if (newModel != null) setModel(newModel);
-            } else if (cmmd == "New") {
-                Utilities.saveChanges(model);
-                setModel(factory.makeModel());
-                // needed cuz setModel sets to true:
-                model.setUnsavedChanges(false);
-            } else if (cmmd == "Quit") {
-                Utilities.saveChanges(model);
-                System.exit(1);
-            } else if (cmmd == "About") {
-                Utilities.inform(factory.about());
-            } else if (cmmd == "Help") {
-                Utilities.inform(factory.getHelp());
-            } else { // must be from Edit menu
-                Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
-                command.execute();
+        try {
+            switch (cmmd) {
+                case "Save":
+                    Utilities.save(model, false);
+                    break;
+                case "Save As":
+                    Utilities.save(model, true);
+                    break;
+                case "Open":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        String fName = Utilities.getFileName((String) null, true);
+                        ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = (Model) is.readObject();
+                        model.initSupport();
+                        setModel(model);
+                        model.addPropertyChangeListener(view);
+                        model.firePropertyChange("Open", oldModel, model);
+                        is.close();
+                    }
+                    break;
+                case "New":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = factory.makeModel();
+                        setModel(model); // set model
+                        model.addPropertyChangeListener(view);
+                        model.initSupport();
+                        model.firePropertyChange("New", oldModel, model);
+                    }
+                    break;
+                case "Quit":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        System.exit(1);
+                    }
+                    break;
+                case "About":
+                    Utilities.inform(factory.about());
+                    break;
+                case "Help":
+                    Utilities.inform(factory.getHelp());
+                    break;
+                default:
+                    Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
+                    command.execute();
             }
+
         } catch (Exception e) {
             handleException(e);
         }
