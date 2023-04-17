@@ -43,7 +43,6 @@ class Host extends Agent {
     public void setInfected(boolean infected) {
         this.infected = infected;
         this.color = Color.RED;
-        //numInfected++;
     }
 
     public Color getColor() {
