@@ -45,13 +45,11 @@ public abstract class Agent implements Serializable, Runnable {
     // Run method, active agent movement or change.
     public void run() {
         myThread = Thread.currentThread();
-        // myThread.start();
         onStart();
         while (!isStopped()) {
             try {
-                // System.out.println("We have a problem");
                 update();
-                Thread.sleep(50); // Suggested speed is 20, too fast for now.
+                Thread.sleep(50);
                 checkSuspended();
             }
             catch (InterruptedException e) {
@@ -76,7 +74,6 @@ public abstract class Agent implements Serializable, Runnable {
     public synchronized void start() {
         System.out.println("Starting");
         suspended = false;
-        run();
     }
 
     // Suspend method, pauses running of the agent.
@@ -87,7 +84,6 @@ public abstract class Agent implements Serializable, Runnable {
 
     // Resume method, resumes running of the agent.
     public synchronized void resume() {
-        // suspended = false;
         notify();
     }
 
@@ -110,7 +106,6 @@ public abstract class Agent implements Serializable, Runnable {
     // Moves the Agent in a direction depending on their heading. 8 cases.
     // Still requires wrapping functionality.
     public void move(int steps) {
-        // System.out.println("We're moving!");
         if (heading == Heading.NORTH) {
             for (int i = 0; i < steps; i++) {
                 yc = yc - 1;
@@ -248,5 +243,13 @@ public abstract class Agent implements Serializable, Runnable {
 
     public Heading getHeading() {
         return heading;
+    }
+
+    public void setSuspended(boolean change) {
+        suspended = change;
+    }
+
+    public void setStopped(boolean change) {
+        stopped = change;
     }
 }
