@@ -76,7 +76,7 @@ public abstract class Agent implements Serializable, Runnable {
     public synchronized void start() {
         System.out.println("Starting");
         suspended = false;
-        run();
+        // run();
     }
 
     // Suspend method, pauses running of the agent.
@@ -248,5 +248,13 @@ public abstract class Agent implements Serializable, Runnable {
 
     public Heading getHeading() {
         return heading;
+    }
+
+    public void setSuspended(boolean change) {
+        suspended = change;
+    }
+
+    public void setStopped(boolean change) {
+        stopped = change;
     }
 }

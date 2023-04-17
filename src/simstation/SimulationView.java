@@ -39,6 +39,7 @@ public class SimulationView extends View {
 
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
+
         repaint();
 
         if (evt.getPropertyName() == null) {
@@ -47,11 +48,9 @@ public class SimulationView extends View {
         }
 
         if (evt.getPropertyName().equals("New") || evt.getPropertyName().equals("Open")) {
-            removeAll();
-            sim.getAgents().clear();
-
+            sim.clearAgents();
+            sim = (Simulation) model;
             sim.populate();
-            sim.start();
         }
     }
 }

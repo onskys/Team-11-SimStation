@@ -16,6 +16,9 @@ public class StartCommand extends Command {
 
     public void execute() {
         Simulation sim = (Simulation) model;
+        if (sim.hasStarted()) {
+            return;
+        }
         sim.start();
     }
 }
