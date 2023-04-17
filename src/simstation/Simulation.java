@@ -121,7 +121,7 @@ public class Simulation extends Model {
         return clock;
     }
 
-    public void setStarted() {hasStarted = true; }
+    public void setStarted(boolean change) {hasStarted = change; }
 
     public boolean hasStarted() {
         return hasStarted;

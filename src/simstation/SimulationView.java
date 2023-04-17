@@ -47,10 +47,29 @@ public class SimulationView extends View {
             return;
         }
 
-        if (evt.getPropertyName().equals("New") || evt.getPropertyName().equals("Open")) {
+        if (evt.getPropertyName().equals("Open")) {
+            sim.clearAgents();
+            Simulation newSim = (Simulation) model;
+            ArrayList<Agent> newAgents = newSim.getAgents();
+
+            sim = (Simulation) model;
+            for (Agent a : newAgents) {
+                sim.addAgent(a);
+            }
+            sim.setStarted(false);
+
+            // Debugging
+            if (sim.getAgents().size() == 0) {
+                System.out.println("No agents");
+            }
+        }
+
+        else if (evt.getPropertyName().equals("New")) {
             sim.clearAgents();
             sim = (Simulation) model;
             sim.populate();
+            sim.setStarted(false);
+            // System.out.println(sim.hasStarted());
         }
     }
 }
