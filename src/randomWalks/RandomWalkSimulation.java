@@ -3,8 +3,7 @@ package randomWalks;
 import mvc.*;
 import simstation.*;
 import javax.swing.*;
-import java.awt.*;
-import java.util.Iterator;
+
 
 /* Class "RandomWalkSimulation" Datalog
 4/4/2023 - Owen Semersky: Created file
