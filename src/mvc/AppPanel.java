@@ -14,8 +14,8 @@ import java.io.ObjectOutputStream;
 4/4/2023 - Owen Semersky: Created File
                           Imported Owen's version of AppPanel
 4/6/2023 - Owen Semersky: Added professor's version of AppPanel
-
-
+4/16/2023 - Owen Semersky: Major edits to actionPerformed
+                           Added some of Sanjana's version of AppPanel
  */
 
 public class AppPanel extends JPanel implements PropertyChangeListener, ActionListener  {

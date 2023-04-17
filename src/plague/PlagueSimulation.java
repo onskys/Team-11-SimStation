@@ -22,6 +22,8 @@ class Host extends Agent {
     Color color;
     int virulence;
     int resistance;
+    public static final int virulenceRange = 30;
+    public static final int resistanceRange = 100;
 
     public Host() {
         super("Host");
@@ -31,8 +33,8 @@ class Host extends Agent {
         //Resistance is the host's immunity towards the plague
         //Virulence is the severity of the plague.
         //Can higher or lower the bounds of resist. and vir. based on host and severity of plague
-        resistance = Utilities.rng.nextInt(100);
-        virulence = Utilities.rng.nextInt(30);
+        resistance = Utilities.rng.nextInt(resistanceRange);
+        virulence = Utilities.rng.nextInt(virulenceRange);
 
     }
 
