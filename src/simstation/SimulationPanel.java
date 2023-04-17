@@ -3,6 +3,9 @@ package simstation;
 import mvc.*;
 import javax.swing.*;
 import java.awt.*;
+import java.beans.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /* Class "SimulationPanel" Datalog
 4/4/2023 - Owen Semersky: Created file

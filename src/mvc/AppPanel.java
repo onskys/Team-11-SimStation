@@ -92,9 +92,58 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
     }
 
     public void actionPerformed(ActionEvent ae) {
-        try {
-            String cmmd = ae.getActionCommand();
+        String cmmd = ae.getActionCommand();
 
+        try {
+            switch (cmmd) {
+                case "Save":
+                    Utilities.save(model, false);
+                case "Save As":
+                    Utilities.save(model, true);
+                case "Open":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        String fName = Utilities.getFileName((String) null, true);
+                        ObjectInputStream is = new ObjectInputStream(new FileInputStream(fName));
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = (Model) is.readObject();
+                        setModel(model);
+                        model.addPropertyChangeListener(view);
+                        model.initSupport();
+                        model.firePropertyChange("Open", oldModel, model);
+                        is.close();
+                    }
+                    break;
+                        // Model newModel = Utilities.open(model);
+                        // if (newModel != null) setModel(newModel);
+                        // break;
+                case "New":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        Model oldModel = model;
+                        model.removePropertyChangeListener(view);
+                        model = factory.makeModel();
+                        setModel(model); // set model
+                        model.addPropertyChangeListener(view);
+                        model.initSupport();
+                        model.firePropertyChange("New", oldModel, model);
+                    }
+                    break;
+                case "Quit":
+                    if (Utilities.confirm("Are you sure? Unsaved changes will be lost!")) {
+                        System.exit(1);
+                    }
+                    break;
+                case "About":
+                    Utilities.inform(factory.about());
+                    break;
+                case "Help":
+                    Utilities.inform(factory.getHelp());
+                    break;
+                default:
+                    Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
+                    command.execute();
+            }
+            /*
             if (cmmd == "Save") {
                 Utilities.save(model, false);
             } else if (cmmd == "SaveAs") {
@@ -118,6 +167,8 @@ public class AppPanel extends JPanel implements PropertyChangeListener, ActionLi
                 Command command = factory.makeEditCommand(model, cmmd, ae.getSource());
                 command.execute();
             }
+
+             */
         } catch (Exception e) {
             handleException(e);
         }

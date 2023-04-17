@@ -3,12 +3,15 @@ package simstation;
 import mvc.*;
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.util.*;
 
 /* Class "SimulationView" Datalog
 4/4/2023 - Owen Semersky: Created file
 4/7/2023 - Owen Semersky: Added method headers and some basic code
 4/11/2023 - Owen Semersky: Minor edits
 4/12/2023 - Owen Semersky: Edits to paintComponent, drawing agents
+4/15/2023 - Owen Semersky: Added getSim method
  */
 
 public class SimulationView extends View {
@@ -26,6 +29,29 @@ public class SimulationView extends View {
         Graphics2D gc2d = (Graphics2D) gc;
         for (Agent a : sim.getAgents()) {
             gc2d.fillRect(a.getX(), a.getY(), 5, 5);
+        }
+    }
+
+    public Simulation getSim() {
+        return sim;
+    }
+
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+        repaint();
+
+        if (evt.getPropertyName() == null) {
+            repaint();
+            return;
+        }
+
+        if (evt.getPropertyName().equals("New") || evt.getPropertyName().equals("Open")) {
+            removeAll();
+            sim.getAgents().clear();
+
+            sim.populate();
+            sim.start();
         }
     }
 }

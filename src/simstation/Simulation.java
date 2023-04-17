@@ -1,6 +1,7 @@
 package simstation;
 
 import mvc.*;
+import java.io.Serializable;
 import java.util.*;
 
 /* Class "Simulation" Datalog
@@ -12,6 +13,7 @@ import java.util.*;
 4/11/2023 - Owen Semersky: Implemented some methods
 4/12/2023 - Owen Semersky: Minor edits
 4/12/2023 - Sanjana Jagarlapudi: Implemented getNeighbor method
+4/15/2023 - Owen Semersky: getNeighbor bug fix
  */
 
 public class Simulation extends Model {
@@ -81,11 +83,11 @@ public class Simulation extends Model {
     public Agent getNeighbor(Agent a, Double radius) {
         boolean done = false;
         while(!done){
-            int index = Utilities.rng.nextInt(1, agents.size());
+            int index = Utilities.rng.nextInt(agents.size());
             Agent randAgent = agents.get(index);
             double distance = Math.sqrt(Math.pow((randAgent.getX() - a.getX()), 2) +
                     Math.pow((randAgent.getY() - a.getY()), 2));
-            if(distance <= 10){
+            if(distance <= radius){
                 return randAgent;
             }
         }
@@ -103,6 +105,10 @@ public class Simulation extends Model {
 
     public ArrayList<Agent> getAgents() {
         return agents;
+    }
+
+    public void setAgents(ArrayList<Agent> newAgents) {
+        agents = newAgents;
     }
 
     // Specific stats specified in customizations.
