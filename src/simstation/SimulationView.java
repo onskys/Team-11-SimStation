@@ -1,8 +1,9 @@
 package simstation;
 
 import mvc.*;
-import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.util.*;
 
 /* Class "SimulationView" Datalog
 4/4/2023 - Owen Semersky: Created file
@@ -34,4 +35,37 @@ public class SimulationView extends View {
         return sim;
     }
 
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+
+        repaint();
+
+        if (evt.getPropertyName() == null) {
+            repaint();
+            return;
+        }
+
+        if (evt.getPropertyName().equals("Open")) {
+            sim.setStarted(false);
+
+            sim.clearAgents();
+            Simulation newSim = (Simulation) model;
+            ArrayList<Agent> newAgents = newSim.getAgents();
+
+            sim = (Simulation) model;
+            for (Agent a : newAgents) {
+                sim.addAgent(a);
+            }
+
+            System.out.println(sim.hasStarted());
+        }
+
+        else if (evt.getPropertyName().equals("New")) {
+            sim.clearAgents();
+            sim = (Simulation) model;
+            sim.populate();
+            sim.setStarted(false);
+        }
+    }
 }
